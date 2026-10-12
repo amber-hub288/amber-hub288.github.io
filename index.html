@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#202521">
+  <meta name="description" content="Signal Desk：检查实验是否可信，连接指标变化与业务决策。">
+  <title>Signal Desk｜实验诊断与决策工作台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="实验导航">
+      <div class="brand"><span class="brand-mark">S</span><div><strong>Signal Desk</strong><small>实验诊断与决策工作台</small></div></div>
+      <div class="side-section">
+        <div class="side-label"><span>实验项目</span><button aria-label="新建实验">＋</button></div>
+        <div id="caseNav" class="case-nav"></div>
+      </div>
+      <div class="side-section data-sources">
+        <div class="side-label"><span>已连接数据</span><span class="count">7</span></div>
+        <div class="source"><i class="ok"></i><span>实验分流</span><b>24.8M</b></div>
+        <div class="source"><i class="ok"></i><span>行为事件</span><b>86.2M</b></div>
+        <div class="source"><i class="warn"></i><span>身份映射</span><b>待核验</b></div>
+        <button id="schemaBtn" class="text-button">查看数据结构 →</button>
+      </div>
+      <div class="privacy-note"><strong>DEMO / 脱敏案例</strong><p>基于真实业务逻辑重构；名称、数据与时间均已脱敏或模拟。</p></div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button id="mobileMenu" class="icon-button mobile-only" aria-label="打开导航">☰</button>
+        <div class="crumb"><span>实验中心</span><b>/</b><strong id="crumbTitle">承接页反转实验</strong></div>
+        <div class="top-actions"><span class="freshness"><i></i>数据更新于 09:40</span><button id="exportBtn" class="button secondary">导出决策记录</button><button id="shareBtn" class="button primary">复制分享链接</button></div>
+      </header>
+      <main>
+        <section class="experiment-header">
+          <div><div class="header-meta"><span id="experimentType">反转实验</span><span id="experimentId">EXP-24017</span></div><h1 id="experimentTitle">承接页反转实验</h1><p id="experimentGoal">判断不同投放渠道是否应该继续使用统一承接页。</p></div>
+          <dl class="experiment-meta"><div><dt>观察窗口</dt><dd id="windowValue">T0—T14</dd></div><div><dt>日均样本</dt><dd id="sampleValue">120 万 DAU</dd></div><div><dt>实验流量</dt><dd id="trafficValue">5%</dd></div><div><dt>结论状态</dt><dd id="statusValue" class="status-text">分群决策</dd></div></dl>
+        </section>
+        <nav class="tabs" aria-label="实验分析模块"><button class="tab active" data-tab="overview">总览 <span>01</span></button><button class="tab" data-tab="quality">数据体检 <span id="qualityCount">02</span></button><button class="tab" data-tab="metrics">指标口径 <span>03</span></button><button class="tab" data-tab="analysis">分析路径 <span>04</span></button><button class="tab" data-tab="report">决策记录 <span>05</span></button></nav>
+        <div id="view" class="view" aria-live="polite"></div>
+      </main>
+    </div>
+
+    <aside class="inspector" aria-label="决策摘要">
+      <div class="inspector-head"><span>DECISION NOTE</span><span id="decisionTime">09:41</span></div>
+      <div id="decisionBadge" class="decision-badge positive">分群上线</div>
+      <h2 id="decisionTitle">自投去承接页，商投保留</h2>
+      <p id="decisionSummary">整体平均掩盖了方向相反的渠道效果，统一策略会持续伤害自投用户。</p>
+      <div class="confidence-row"><span>结论置信度</span><strong id="confidenceValue">高</strong></div><div class="confidence-bar"><i id="confidenceBar" style="width:86%"></i></div>
+      <div class="inspector-section"><h3>核心证据</h3><ol id="evidenceList"></ol></div>
+      <div class="inspector-section"><h3>决策条件</h3><div id="conditionsList" class="conditions"></div></div>
+      <div class="inspector-section caveat"><h3>尚未解决</h3><p id="caveatText"></p></div>
+    </aside>
+  </div>
+
+  <dialog id="schemaDialog">
+    <form method="dialog"><div class="dialog-head"><div><span class="mono-label">DATA CONTRACT</span><h2>工作台需要哪些数据</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div><p class="dialog-intro">每张表都必须声明主键、统计粒度和时间字段；身份映射是跨表分析的前置条件。</p><div class="schema-grid"><article><b>01</b><strong>实验配置</strong><p>实验类型、分组、流量、起止时间、实验关系</p></article><article><b>02</b><strong>分流曝光</strong><p>uid、did、实验组、flag、曝光时间</p></article><article><b>03</b><strong>身份映射</strong><p>visitor_id、uid、did、account_id、映射时间</p></article><article><b>04</b><strong>行为事件</strong><p>曝光、点击、登录、注册、搜索、领券、签到</p></article><article><b>05</b><strong>交易收益</strong><p>订单、支付、退款、GMV、MAC、UE</p></article><article><b>06</b><strong>成本补贴</strong><p>发券、核销、券成本、投放成本、预算</p></article><article><b>07</b><strong>用户渠道</strong><p>拉新/拉活、渠道、设备、价格带、兴趣、活跃度</p></article><article><b>08</b><strong>指标字典</strong><p>公式、分母、窗口、去重规则、负责人、版本</p></article></div><menu><button class="button primary" value="cancel">知道了</button></menu></form>
+  </dialog>
+  <dialog id="metricDialog"><form method="dialog"><div class="dialog-head"><div><span class="mono-label">METRIC CONTRACT</span><h2 id="metricDialogTitle">指标口径</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div><div id="metricDialogBody"></div><menu><button class="button primary" value="cancel">关闭</button></menu></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
